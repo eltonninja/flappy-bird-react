@@ -5,8 +5,8 @@ export function initializeGame({
   flapPower = 200,
   gravity = 500,
   gapSize = 120,
-  onStarted,
-  onFinished,
+  beforeStart,
+  afterFinished,
 } = {}) {
   /**
    *
@@ -463,6 +463,8 @@ export function initializeGame({
 
     gameOverBanner.visible = true;
     restartButton.visible = true;
+
+    afterFinished(score);
   }
 
   /**
@@ -638,17 +640,19 @@ export function initializeGame({
    * @param {object} scene - Game scene.
    */
   function startGame(scene) {
-    // onStarted();
-    gameStarted = true;
-    messageInitial.visible = false;
+    beforeStart().then((ok) => {
+      if (!ok) return;
+      gameStarted = true;
+      messageInitial.visible = false;
 
-    const score0 = scoreboardGroup.create(
-      assets.scene.width,
-      30,
-      assets.scoreboard.number0
-    );
-    score0.setDepth(20);
+      const score0 = scoreboardGroup.create(
+        assets.scene.width,
+        30,
+        assets.scoreboard.number0
+      );
+      score0.setDepth(20);
 
-    makePipes(scene);
+      makePipes(scene);
+    });
   }
 }
