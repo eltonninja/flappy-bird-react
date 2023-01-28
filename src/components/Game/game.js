@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { io } from "socket.io-client";
 
 export function initializeGame({
   birdSpeed = 130,
@@ -7,6 +8,7 @@ export function initializeGame({
   gapSize = 120,
   beforeStart,
   afterFinished,
+  address,
 } = {}) {
   /**
    *
@@ -207,6 +209,8 @@ export function initializeGame({
    * @type {number}
    */
   let score;
+
+  const socket = io("http://localhost:5000");
 
   /**
    *   Load the game assets.
@@ -465,6 +469,8 @@ export function initializeGame({
     restartButton.visible = true;
 
     afterFinished(score);
+
+    socket.emit("game.hit", { address });
   }
 
   /**
@@ -486,6 +492,8 @@ export function initializeGame({
     }
 
     updateScoreboard();
+
+    socket.emit("game.passed", { address });
   }
 
   /**
@@ -653,6 +661,11 @@ export function initializeGame({
       score0.setDepth(20);
 
       makePipes(scene);
+
+      socket.emit("game.started", {
+        address,
+      });
     });
   }
+  return { game, socket };
 }
