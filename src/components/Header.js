@@ -4,7 +4,7 @@ import { Button } from "./lib";
 import { FaRegCopy } from "react-icons/fa";
 import SvgAlgoIcon from "../assets/AlgoIcon";
 
-export function Header({ account, balance, send }) {
+export function Header({ account, balance, send, disconnect }) {
   return (
     <Wrapper>
       <NameText>{account.name}</NameText>
@@ -16,6 +16,7 @@ export function Header({ account, balance, send }) {
         {balance} <AlgoIcon width={24} height={24} fill={colors.orange} />
       </BalanceText>
       <SendButton onClick={send}>Send</SendButton>
+      <DisconnectButton onClick={disconnect}>Disconnect</DisconnectButton>
     </Wrapper>
   );
 }
@@ -63,4 +64,7 @@ const AlgoIcon = styled(SvgAlgoIcon)({
 
 const SendButton = styled(Button)({
   marginLeft: 20,
+});
+const DisconnectButton = styled(Button)({
+  marginLeft: 5,
 });

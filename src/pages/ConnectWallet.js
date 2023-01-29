@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { Button } from "../components/lib";
 
-export function ConnectWallet({ onConnect }) {
+export function ConnectWallet({ connect }) {
   return (
     <Wrapper>
-      <Button size="large" onClick={onConnect}>
+      <Button size="large" onClick={connect}>
         Connect
       </Button>
     </Wrapper>

@@ -7,7 +7,7 @@ function App() {
   const [account, setAccount] = useState(null);
   const myAlgoConnectRef = useRef();
 
-  const handleConnect = async () => {
+  const connect = async () => {
     const myAlgoConnect = new MyAlgoConnect();
     const accountsSharedByUser = await myAlgoConnect.connect({
       shouldSelectOneAccount: true,
@@ -16,17 +16,20 @@ function App() {
     setAccount(accountsSharedByUser[0]);
 
     myAlgoConnectRef.current = myAlgoConnect;
+  };
 
-    // setAccount({
-    //   name: "Lazaro",
-    //   address: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
-    // });
+  const disconnect = () => {
+    setAccount(null);
   };
 
   return account ? (
-    <Home account={account} />
+    <Home
+      account={account}
+      disconnect={disconnect}
+      myAlgoConnect={myAlgoConnectRef.current}
+    />
   ) : (
-    <ConnectWallet onConnect={handleConnect} />
+    <ConnectWallet connect={connect} />
   );
 }
 

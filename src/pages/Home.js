@@ -17,7 +17,7 @@ const token = {
 
 const algodclient = new algosdk.Algodv2(token, baseServer, port);
 
-export function Home({ account }) {
+export function Home({ account, disconnect, myAlgoConnect }) {
   const [balance, setBalance] = useState(0);
   const [balanceUpdated, setBalanceUpdated] = useState(0);
   const [top10Wallets, setTop10Wallets] = useState([
@@ -33,8 +33,6 @@ export function Home({ account }) {
     "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
   ]);
 
-  const myAlgoConnectRef = useRef();
-
   useEffect(() => {
     if (!account?.address) return;
     algodclient
@@ -45,14 +43,13 @@ export function Home({ account }) {
   }, [account?.address, balanceUpdated]);
 
   const send = async () => {
-    const myAlgoConnect = myAlgoConnectRef.current;
-    if (!myAlgoConnect) return;
+    console.log(myAlgoConnect)
     let params = await algodclient.getTransactionParams().do();
     const enc = new TextEncoder();
     let note = enc.encode("Test");
     const txn = algosdk.makePaymentTxnWithSuggestedParams(
-      "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
       "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
+      "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
       1_000_000,
       undefined,
       note,
@@ -67,7 +64,12 @@ export function Home({ account }) {
 
   return (
     <Wrapper>
-      <Header account={account} balance={balance} send={send} />
+      <Header
+        account={account}
+        balance={balance}
+        send={send}
+        disconnect={disconnect}
+      />
       <Main>
         <StyledPrizes
           prizeWallet="TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4"
