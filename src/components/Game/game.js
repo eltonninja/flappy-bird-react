@@ -470,7 +470,7 @@ export function initializeGame({
 
     afterFinished(score);
 
-    socket.emit("game.hit", { address });
+    socket.emit("game:hit", { address });
   }
 
   /**
@@ -493,7 +493,7 @@ export function initializeGame({
 
     updateScoreboard();
 
-    socket.emit("game.passed", { address });
+    socket.emit("game:passed", { address });
   }
 
   /**
@@ -662,7 +662,7 @@ export function initializeGame({
 
       makePipes(scene);
 
-      socket.emit("game.started", {
+      socket.emit("game:started", {
         address,
       });
     });
