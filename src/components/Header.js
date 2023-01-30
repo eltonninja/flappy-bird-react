@@ -24,6 +24,11 @@ export function Header({
         {formatWalletAddress(account.address)}
         <FaRegCopy title={account.address} />
       </AddressText>
+      {isLoadingBalance || (
+        <BalanceText>
+          {balance} <AlgoIcon width={16} height={16} fill={colors.orange} />
+        </BalanceText>
+      )}
       {isLoadingLastGame || (
         <>
           <Scores>
@@ -34,15 +39,8 @@ export function Header({
           </Scores>
           {lastGame["score4"] > -1 ? (
             <>
-              {isLoadingBalance || (
-                <BalanceText>
-                  {balance}{" "}
-                  <AlgoIcon width={24} height={24} fill={colors.orange} />
-                </BalanceText>
-              )}
               <PurchaseButton
                 onClick={purchase}
-                isLoadingBalance={isLoadingBalance}
                 disabled={isPurchasing}
                 title="You should purchase 4 algo, or your score won't be recorded."
               >
@@ -98,11 +96,11 @@ const AddressText = styled.p({
 });
 
 const BalanceText = styled.p({
-  marginLeft: "auto",
+  marginLeft: 12,
   display: "flex",
   alignItems: "center",
-  fontSize: 24,
-  fontWeight: 900,
+  fontSize: 20,
+  fontWeight: 700,
   color: colors.orange,
   "& > img": {
     marginLeft: 5,
@@ -116,10 +114,10 @@ const AlgoIcon = styled(SvgAlgoIcon)({
 const PurchaseButton = styled(Button)({
   display: "flex",
   alignItems: "center",
+  marginLeft: "auto",
   "& > svg": {
     marginRight: 5,
   },
-  marginLeft: ({ isLoadingBalance }) => (isLoadingBalance ? "auto" : "20px"),
 });
 const PurchasedButton = styled(Button)({
   color: colors.orange,
