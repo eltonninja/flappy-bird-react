@@ -49,17 +49,18 @@ export function Header({
               </PurchaseButton>
             </>
           ) : (
-            <PurchaseButton
+            <PurchasedButton
               onClick={copyPurchaseTx}
               isLoadingBalance={isLoadingBalance}
               disabled={isPurchasing}
               title={lastGame["purchase_tx"]}
+              variant="text"
               style={{
                 marginLeft: "auto",
               }}
             >
               <FaRegCopy title={lastGame["purchase_tx"]} /> Purchased
-            </PurchaseButton>
+            </PurchasedButton>
           )}
           <DisconnectButton onClick={disconnect}>Disconnect</DisconnectButton>
         </>
@@ -113,6 +114,13 @@ const AlgoIcon = styled(SvgAlgoIcon)({
 const PurchaseButton = styled(Button)({
   marginLeft: ({ isLoadingBalance }) => (isLoadingBalance ? "auto" : "20px"),
 });
+const PurchasedButton = styled(Button)({
+  color: colors.orange,
+  marginLeft: ({ isLoadingBalance }) => (isLoadingBalance ? "auto" : "20px"),
+  "&:hover": {
+    color: colors.white,
+  },
+});
 const DisconnectButton = styled(Button)({
   color: colors.orange,
   marginLeft: 5,
@@ -153,6 +161,9 @@ const StyledScore = styled(Score)({
     height: 8,
     border: `1px solid ${colors.orange}`,
     borderRadius: "100%",
-    background: ({ value }) => (value === -1 ? colors.white : colors.orange),
+    background: ({ value }) =>
+      value === -1 || value === undefined || value === null
+        ? colors.white
+        : colors.orange,
   },
 });
