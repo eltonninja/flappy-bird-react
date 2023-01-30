@@ -4,7 +4,16 @@ import { Button } from "./lib";
 import { FaRegCopy } from "react-icons/fa";
 import SvgAlgoIcon from "../assets/AlgoIcon";
 
-export function Header({ account, balance, send, disconnect }) {
+export function Header({
+  account,
+  balance,
+  isLoadingBalance,
+  lastGame,
+  isLoadingLastGame,
+  purchase,
+  disconnect,
+}) {
+  console.log(lastGame);
   return (
     <Wrapper>
       <NameText>{account.name}</NameText>
@@ -12,11 +21,29 @@ export function Header({ account, balance, send, disconnect }) {
         {account.address}
         <FaRegCopy title={account.address} />
       </AddressText>
-      <BalanceText>
-        {balance} <AlgoIcon width={24} height={24} fill={colors.orange} />
-      </BalanceText>
-      <SendButton onClick={send}>Send</SendButton>
-      <DisconnectButton onClick={disconnect}>Disconnect</DisconnectButton>
+      {isLoadingLastGame ||
+        (lastGame["score4"] > -1 ? (
+          <>
+            {isLoadingBalance || (
+              <BalanceText>
+                {balance}{" "}
+                <AlgoIcon width={24} height={24} fill={colors.orange} />
+              </BalanceText>
+            )}
+            <SendButton onClick={purchase} isLoadingBalance={isLoadingBalance}>
+              Purchase
+            </SendButton>
+            <DisconnectButton onClick={disconnect}>Disconnect</DisconnectButton>
+          </>
+        ) : lastGame["score3"] > -1 ? (
+          <RoundLeftText>1 round left</RoundLeftText>
+        ) : lastGame["score2"] > -1 ? (
+          <RoundLeftText>2 rounds left</RoundLeftText>
+        ) : lastGame["score1"] > -1 ? (
+          <RoundLeftText>3 rounds left</RoundLeftText>
+        ) : (
+          <RoundLeftText>4 rounds left</RoundLeftText>
+        ))}
     </Wrapper>
   );
 }
@@ -63,8 +90,23 @@ const AlgoIcon = styled(SvgAlgoIcon)({
 });
 
 const SendButton = styled(Button)({
-  marginLeft: 20,
+  marginLeft: ({ isLoadingBalance }) => (isLoadingBalance ? "auto" : "20px"),
 });
 const DisconnectButton = styled(Button)({
+  color: colors.orange,
   marginLeft: 5,
+  "&:hover": {
+    color: colors.white,
+  },
+});
+DisconnectButton.defaultProps = {
+  variant: "text",
+};
+
+const RoundLeftText = styled.p({
+  marginLeft: "auto",
+  color: colors.orange,
+  fontSize: 20,
+  fontWeight: 900,
+  textTransform: "uppercase",
 });

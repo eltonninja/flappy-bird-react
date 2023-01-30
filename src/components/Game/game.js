@@ -210,7 +210,8 @@ export function initializeGame({
    */
   let score;
 
-  const socket = io("http://localhost:5000");
+  const socket = io(process.env.REACT_APP_SERVER_HOST);
+  socket.on("game:finished", afterFinished);
 
   /**
    *   Load the game assets.
@@ -468,7 +469,7 @@ export function initializeGame({
     gameOverBanner.visible = true;
     restartButton.visible = true;
 
-    afterFinished(score);
+    afterFinished();
 
     socket.emit("game:hit", { address });
   }

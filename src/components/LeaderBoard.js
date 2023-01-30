@@ -10,82 +10,102 @@ import { Button } from "./lib";
 export function LeaderBoard({ className }) {
   const [games, setGames] = useState([
     {
+      id: 1,
       wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
       score: 1130,
     },
     {
+      id: 2,
       wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
       score: 854,
     },
     {
+      id: 3,
       wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
       score: 760,
     },
     {
+      id: 4,
       wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
       score: 490,
     },
     {
+      id: 5,
       wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
       score: 389,
     },
     {
+      id: 6,
       wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
       score: 386,
     },
     {
+      id: 7,
       wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
       score: 270,
     },
     {
+      id: 8,
       wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
       score: 240,
     },
     {
+      id: 9,
       wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
       score: 211,
     },
     {
+      id: 10,
       wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
       score: 192,
     },
     {
+      id: 11,
       wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
       score: 187,
     },
     {
+      id: 12,
       wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
       score: 154,
     },
     {
+      id: 13,
       wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
       score: 133,
     },
     {
+      id: 14,
       wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
       score: 122,
     },
     {
+      id: 15,
       wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
       score: 121,
     },
     {
+      id: 16,
       wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
       score: 120,
     },
     {
+      id: 17,
       wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
       score: 101,
     },
     {
+      id: 18,
       wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
       score: 99,
     },
     {
+      id: 19,
       wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
       score: 96,
     },
     {
+      id: 20,
       wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
       score: 95,
     },
@@ -112,7 +132,7 @@ export function LeaderBoard({ className }) {
         </CheckboxWrapper>
         <ScoreList>
           {games.map((game, i) => (
-            <ScoreItem>
+            <ScoreItem key={game.id}>
               <ScoreItemRank>{`#${offset + i}`}</ScoreItemRank>
               <ScoreItemScore>{game.score}</ScoreItemScore>
               <ScoreItemAddress>

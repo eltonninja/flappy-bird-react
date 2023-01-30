@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useQueryClient } from "react-query";
 
 import { Header } from "../components/Header";
 import { Game } from "../components/Game";
@@ -8,6 +9,7 @@ import { LeaderBoard } from "../components/LeaderBoard";
 import { waitForConfirmation } from "algosdk";
 import algosdk from "algosdk";
 import styled from "styled-components";
+import { useBalance, useLastGame } from "../hooks";
 
 const baseServer = "https://testnet-algorand.api.purestake.io/ps2";
 const port = "";
@@ -18,32 +20,41 @@ const token = {
 const algodclient = new algosdk.Algodv2(token, baseServer, port);
 
 export function Home({ account, disconnect, myAlgoConnect }) {
-  const [balance, setBalance] = useState(0);
-  const [balanceUpdated, setBalanceUpdated] = useState(0);
+  const [updated, setUpdated] = useState(0);
   const [top10Wallets, setTop10Wallets] = useState([
-    "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-    "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
-    "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-    "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
-    "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-    "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
-    "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-    "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
-    "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-    "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
+    "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH1",
+    "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJ2",
+    "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH3",
+    "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJ4",
+    "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH5",
+    "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJ6",
+    "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH7",
+    "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJ8",
+    "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH9",
+    "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJ0",
   ]);
+  const { data: balance, isLoading: isLoadingBalance } = useBalance(
+    account?.address,
+    algodclient
+  );
+  const { data: lastGame, isLoading: isLoadingLastGame } = useLastGame(
+    account?.address
+  );
+
+  const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (!account?.address) return;
-    algodclient
-      .accountInformation(account.address)
-      .do()
-      .then((info) => info.amount / 1_000_000)
-      .then((balance) => setBalance(balance));
-  }, [account?.address, balanceUpdated]);
+    queryClient.invalidateQueries({ queryKey: "balance" });
+  }, [queryClient, updated]);
 
-  const send = async () => {
-    console.log(myAlgoConnect)
+  const handleAfterGameFinished = useCallback(() => {
+    queryClient.invalidateQueries({
+      queryKey: ["last-game", account?.address],
+    });
+  }, [account?.address, queryClient]);
+
+  const purchase = async () => {
+    console.log(myAlgoConnect);
     let params = await algodclient.getTransactionParams().do();
     const enc = new TextEncoder();
     let note = enc.encode("Test");
@@ -59,7 +70,7 @@ export function Home({ account, disconnect, myAlgoConnect }) {
     const sendTx = await algodclient.sendRawTransaction(signedTxn.blob).do();
     console.log("Transaction: " + sendTx.txId);
     await waitForConfirmation(algodclient, sendTx.txId, 30);
-    setBalanceUpdated((i) => i + 1);
+    setUpdated((i) => i + 1);
   };
 
   return (
@@ -67,7 +78,10 @@ export function Home({ account, disconnect, myAlgoConnect }) {
       <Header
         account={account}
         balance={balance}
-        send={send}
+        isLoadingBalance={isLoadingBalance}
+        lastGame={lastGame}
+        isLoadingLastGame={isLoadingLastGame}
+        purchase={purchase}
         disconnect={disconnect}
       />
       <Main>
@@ -76,7 +90,10 @@ export function Home({ account, disconnect, myAlgoConnect }) {
           prizeAlgo={108243}
           top10Wallets={top10Wallets}
         />
-        <StyledGame address={account?.address} />
+        <StyledGame
+          address={account?.address}
+          handleAfterFinished={handleAfterGameFinished}
+        />
         <StyledLeaderBoard />
       </Main>
     </Wrapper>

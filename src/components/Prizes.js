@@ -22,7 +22,7 @@ export function Prizes({ prizeWallet, prizeAlgo, top10Wallets, className }) {
         </TimeLeftText>
         <PrizeList>
           {top10Wallets.map((wallet, i) => (
-            <PrizeItem>
+            <PrizeItem key={wallet}>
               <PrizeItemRank>#{i + 1}</PrizeItemRank>
               <PrizeItemWallet>{formatWalletAddress(wallet)}</PrizeItemWallet>
               <CopyIcon title={wallet} />

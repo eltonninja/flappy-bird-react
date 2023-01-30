@@ -3,12 +3,13 @@ import styled from "styled-components";
 import colors from "../../values/colors";
 import { initializeGame } from "./game";
 
-export function Game({ address, className }) {
+export function Game({ address, className, handleAfterFinished }) {
   useEffect(() => {
     const { game, socket } = initializeGame({
-      beforeStart: async () =>
-        new Promise((resolve) => setTimeout(() => resolve(true), 0)),
-      afterFinished: async (score) => {},
+      beforeStart: async () => {
+        return true;
+      },
+      afterFinished: handleAfterFinished,
       address,
     });
     return () => {
@@ -16,7 +17,7 @@ export function Game({ address, className }) {
       game.destroy();
       socket.disconnect();
     };
-  }, [address]);
+  }, [address, handleAfterFinished]);
 
   return <Wrapper id="game" className={className}></Wrapper>;
 }
