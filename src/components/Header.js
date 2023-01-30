@@ -3,6 +3,7 @@ import colors from "../values/colors";
 import { Button } from "./lib";
 import { FaRegCopy } from "react-icons/fa";
 import SvgAlgoIcon from "../assets/AlgoIcon";
+import { formatWalletAddress } from "../utils";
 
 export function Header({
   account,
@@ -14,45 +15,61 @@ export function Header({
   isPurchasing,
   disconnect,
 }) {
+  const copyPurchaseTx = () => {};
+
   return (
     <Wrapper>
       <NameText>{account.name}</NameText>
       <AddressText>
-        {account.address}
+        {formatWalletAddress(account.address)}
         <FaRegCopy title={account.address} />
       </AddressText>
-      {isLoadingLastGame ||
-        (lastGame["score4"] > -1 ? (
-          <>
-            {isLoadingBalance || (
-              <BalanceText>
-                {balance}{" "}
-                <AlgoIcon width={24} height={24} fill={colors.orange} />
-              </BalanceText>
-            )}
+      {isLoadingLastGame || (
+        <>
+          <Scores>
+            <StyledScore value={lastGame["score1"]} />
+            <StyledScore value={lastGame["score2"]} />
+            <StyledScore value={lastGame["score3"]} />
+            <StyledScore value={lastGame["score4"]} />
+          </Scores>
+          {lastGame["score4"] > -1 ? (
+            <>
+              {isLoadingBalance || (
+                <BalanceText>
+                  {balance}{" "}
+                  <AlgoIcon width={24} height={24} fill={colors.orange} />
+                </BalanceText>
+              )}
+              <PurchaseButton
+                onClick={purchase}
+                isLoadingBalance={isLoadingBalance}
+                disabled={isPurchasing}
+              >
+                {isPurchasing ? "Purchasing ..." : "Purchase"}
+              </PurchaseButton>
+            </>
+          ) : (
             <PurchaseButton
-              onClick={purchase}
+              onClick={copyPurchaseTx}
               isLoadingBalance={isLoadingBalance}
               disabled={isPurchasing}
+              title={lastGame["purchase_tx"]}
+              style={{
+                marginLeft: "auto",
+              }}
             >
-              {isPurchasing ? "Purchasing ..." : "Purchase"}
+              <FaRegCopy title={lastGame["purchase_tx"]} /> Purchased
             </PurchaseButton>
-            <DisconnectButton onClick={disconnect}>Disconnect</DisconnectButton>
-          </>
-        ) : lastGame["score3"] > -1 ? (
-          <RoundLeftText>1 round left</RoundLeftText>
-        ) : lastGame["score2"] > -1 ? (
-          <RoundLeftText>2 rounds left</RoundLeftText>
-        ) : lastGame["score1"] > -1 ? (
-          <RoundLeftText>3 rounds left</RoundLeftText>
-        ) : (
-          <RoundLeftText>4 rounds left</RoundLeftText>
-        ))}
+          )}
+          <DisconnectButton onClick={disconnect}>Disconnect</DisconnectButton>
+        </>
+      )}
     </Wrapper>
   );
 }
 
 const Wrapper = styled.header({
+  position: "relative",
   display: "flex",
   padding: 10,
   alignItems: "center",
@@ -107,10 +124,35 @@ DisconnectButton.defaultProps = {
   variant: "text",
 };
 
-const RoundLeftText = styled.p({
-  marginLeft: "auto",
+const Scores = styled.p({
+  position: "absolute",
+  left: "calc(50% + 15px)",
+  transform: "translateX(-50%)",
+  display: "flex",
+  alignItems: "center",
+  gap: 20,
+});
+
+const Score = ({ value, className }) => {
+  return <span className={className}>{value === -1 ? "" : value}</span>;
+};
+
+const StyledScore = styled(Score)({
+  position: "relative",
+  paddingLeft: 15,
   color: colors.orange,
-  fontSize: 20,
+  fontSize: 24,
   fontWeight: 900,
-  textTransform: "uppercase",
+  "&:before": {
+    content: '""',
+    position: "absolute",
+    left: 0,
+    top: "50%",
+    transform: "translateY(-50%)",
+    width: 8,
+    height: 8,
+    border: `1px solid ${colors.orange}`,
+    borderRadius: "100%",
+    background: ({ value }) => (value === -1 ? colors.white : colors.orange),
+  },
 });

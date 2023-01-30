@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import colors from "../values/colors";
+import colors from "../../values/colors";
 
 export const Button = styled.button({
   padding: ({ size = "medium" }) => paddings[size],

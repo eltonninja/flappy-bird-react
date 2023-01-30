@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 
 import { Header } from "../components/Header";
@@ -109,7 +109,7 @@ export function Home({ account, disconnect, myAlgoConnect }) {
       />
       <Main>
         <StyledPrizes
-          prizeWallet="TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4"
+          prizeWallet={process.env.REACT_APP_PRIZE_WALLET}
           prizeAlgo={108243}
           top10Wallets={top10Wallets}
         />
