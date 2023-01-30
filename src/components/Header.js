@@ -11,9 +11,9 @@ export function Header({
   lastGame,
   isLoadingLastGame,
   purchase,
+  isPurchasing,
   disconnect,
 }) {
-  console.log(lastGame);
   return (
     <Wrapper>
       <NameText>{account.name}</NameText>
@@ -30,9 +30,13 @@ export function Header({
                 <AlgoIcon width={24} height={24} fill={colors.orange} />
               </BalanceText>
             )}
-            <SendButton onClick={purchase} isLoadingBalance={isLoadingBalance}>
-              Purchase
-            </SendButton>
+            <PurchaseButton
+              onClick={purchase}
+              isLoadingBalance={isLoadingBalance}
+              disabled={isPurchasing}
+            >
+              {isPurchasing ? "Purchasing ..." : "Purchase"}
+            </PurchaseButton>
             <DisconnectButton onClick={disconnect}>Disconnect</DisconnectButton>
           </>
         ) : lastGame["score3"] > -1 ? (
@@ -89,7 +93,7 @@ const AlgoIcon = styled(SvgAlgoIcon)({
   marginLeft: 3,
 });
 
-const SendButton = styled(Button)({
+const PurchaseButton = styled(Button)({
   marginLeft: ({ isLoadingBalance }) => (isLoadingBalance ? "auto" : "20px"),
 });
 const DisconnectButton = styled(Button)({

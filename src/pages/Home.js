@@ -10,6 +10,7 @@ import { waitForConfirmation } from "algosdk";
 import algosdk from "algosdk";
 import styled from "styled-components";
 import { useBalance, useLastGame } from "../hooks";
+import axios from "axios";
 
 const baseServer = "https://testnet-algorand.api.purestake.io/ps2";
 const port = "";
@@ -20,7 +21,6 @@ const token = {
 const algodclient = new algosdk.Algodv2(token, baseServer, port);
 
 export function Home({ account, disconnect, myAlgoConnect }) {
-  const [updated, setUpdated] = useState(0);
   const [top10Wallets, setTop10Wallets] = useState([
     "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH1",
     "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJ2",
@@ -40,12 +40,13 @@ export function Home({ account, disconnect, myAlgoConnect }) {
   const { data: lastGame, isLoading: isLoadingLastGame } = useLastGame(
     account?.address
   );
+  const [isPurchasing, setIsPurchasing] = useState(false);
 
   const queryClient = useQueryClient();
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: "balance" });
-  }, [queryClient, updated]);
+  }, [queryClient]);
 
   const handleAfterGameFinished = useCallback(() => {
     queryClient.invalidateQueries({
@@ -53,25 +54,46 @@ export function Home({ account, disconnect, myAlgoConnect }) {
     });
   }, [account?.address, queryClient]);
 
-  const purchase = async () => {
-    console.log(myAlgoConnect);
-    let params = await algodclient.getTransactionParams().do();
-    const enc = new TextEncoder();
-    let note = enc.encode("Test");
-    const txn = algosdk.makePaymentTxnWithSuggestedParams(
-      "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-      "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
-      1_000_000,
-      undefined,
-      note,
-      params
-    );
-    const signedTxn = await myAlgoConnect.signTransaction(txn.toByte());
-    const sendTx = await algodclient.sendRawTransaction(signedTxn.blob).do();
-    console.log("Transaction: " + sendTx.txId);
-    await waitForConfirmation(algodclient, sendTx.txId, 30);
-    setUpdated((i) => i + 1);
-  };
+  const purchase = useCallback(async () => {
+    setIsPurchasing(true);
+
+    try {
+      let params = await algodclient.getTransactionParams().do();
+      const enc = new TextEncoder();
+      let note = enc.encode("Purchase Flappy Bird Game for 4 algo");
+      console.log(process.env.REACT_APP_PRIZE_WALLET);
+      console.log(process.env.REACT_APP_PURCHASE_AMOUNT * 1_000_000);
+      const txn = algosdk.makePaymentTxnWithSuggestedParams(
+        account?.address,
+        process.env.REACT_APP_PRIZE_WALLET,
+        process.env.REACT_APP_PURCHASE_AMOUNT * 1_000_000,
+        undefined,
+        note,
+        params
+      );
+      const signedTxn = await myAlgoConnect.signTransaction(txn.toByte());
+      const sendTx = await algodclient.sendRawTransaction(signedTxn.blob).do();
+      console.log("Transaction: " + sendTx.txId);
+      await waitForConfirmation(algodclient, sendTx.txId, 30);
+
+      axios
+        .post(`${process.env.REACT_APP_API_URL}/purchase`, {
+          wallet: account?.address,
+          purchase_tx: sendTx.txId,
+        })
+        .then((res) => {
+          console.log(res);
+          queryClient.setQueryData(["last-game", account?.address], res);
+          setIsPurchasing(false);
+        })
+        .catch((err) => {
+          console.log("Error occured:", err);
+          setIsPurchasing(false);
+        });
+    } catch (e) {
+      setIsPurchasing(false);
+    }
+  }, [account?.address, myAlgoConnect, queryClient]);
 
   return (
     <Wrapper>
@@ -82,6 +104,7 @@ export function Home({ account, disconnect, myAlgoConnect }) {
         lastGame={lastGame}
         isLoadingLastGame={isLoadingLastGame}
         purchase={purchase}
+        isPurchasing={isPurchasing}
         disconnect={disconnect}
       />
       <Main>
