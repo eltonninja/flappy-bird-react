@@ -1,12 +1,29 @@
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { Panel, PanelHead, PanelBody } from "./Panel";
 import { FaRegCopy } from "react-icons/fa";
 import prizeRates from "../values/prizeRates";
 import colors from "../values/colors";
 import SvgAlgoIcon from "../assets/AlgoIcon";
-import { formatNumber, formatWalletAddress } from "../utils";
+import { formatNumber, formatTimeSpan, formatWalletAddress } from "../utils";
+import { usePrizes } from "../hooks";
 
-export function Prizes({ prizeWallet, prizeAlgo, top10Wallets, className }) {
+export function Prizes({ prizeWallet, className }) {
+  const { data, isLoading, isError, erro } = usePrizes();
+  const [leftTime, setLeftTime] = useState(0);
+  const timerRef = useRef();
+
+  useEffect(() => {
+    if (!data?.leftTime) return;
+    setLeftTime(data?.leftTime);
+    timerRef.current = setInterval(() => {
+      setLeftTime((i) => i - 1000);
+    }, 1000);
+    return () => {
+      clearInterval(timerRef.current);
+    };
+  }, [data?.leftTime]);
+
   return (
     <Panel className={className}>
       <PanelHead>
@@ -16,24 +33,26 @@ export function Prizes({ prizeWallet, prizeAlgo, top10Wallets, className }) {
           <FaRegCopy title={prizeWallet} />
         </WalletText>
       </PanelHead>
-      <StyledPanelBody>
-        <TimeLeftText>
-          Competition Ends <span>7d 3h 31m 14s</span>
-        </TimeLeftText>
-        <PrizeList>
-          {top10Wallets.map((wallet, i) => (
-            <PrizeItem key={wallet}>
-              <PrizeItemRank>#{i + 1}</PrizeItemRank>
-              <PrizeItemWallet>{formatWalletAddress(wallet)}</PrizeItemWallet>
-              <CopyIcon title={wallet} />
-              <PrizeItemValue>
-                {formatNumber(Math.round(prizeAlgo * prizeRates[i]))}
-                <AlgoIcon width={20} height={20} fill={colors.orange} />
-              </PrizeItemValue>{" "}
-            </PrizeItem>
-          ))}
-        </PrizeList>
-      </StyledPanelBody>
+      {data && (
+        <StyledPanelBody>
+          <TimeLeftText>
+            Competition Ends <span>{formatTimeSpan(leftTime)}</span>
+          </TimeLeftText>
+          <PrizeList>
+            {data.prizes.map(({ wallet, score }, i) => (
+              <PrizeItem key={wallet}>
+                <PrizeItemRank>#{i + 1}</PrizeItemRank>
+                <PrizeItemWallet>{formatWalletAddress(wallet)}</PrizeItemWallet>
+                <CopyIcon title={wallet} />
+                <PrizeItemValue>
+                  {formatNumber(Math.round(data.algo * prizeRates[i]))}
+                  <AlgoIcon width={20} height={20} fill={colors.orange} />
+                </PrizeItemValue>{" "}
+              </PrizeItem>
+            ))}
+          </PrizeList>
+        </StyledPanelBody>
+      )}
     </Panel>
   );
 }
