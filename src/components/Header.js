@@ -139,7 +139,7 @@ DisconnectButton.defaultProps = {
 
 const Scores = styled.p({
   position: "absolute",
-  left: "calc(50% + 15px)",
+  left: "50%",
   transform: "translateX(-50%)",
   display: "flex",
   alignItems: "center",

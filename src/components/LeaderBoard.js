@@ -6,111 +6,34 @@ import { Panel, PanelHead, PanelBody, PanelFooter } from "./Panel";
 import Checkbox from "react-custom-checkbox";
 import { FaCheck, FaRegCopy } from "react-icons/fa";
 import { Button } from "./lib";
+import { useLeaderBoard } from "../hooks";
 
-export function LeaderBoard({ className }) {
-  const [games, setGames] = useState([
-    {
-      id: 1,
-      wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-      score: 1130,
-    },
-    {
-      id: 2,
-      wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
-      score: 854,
-    },
-    {
-      id: 3,
-      wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-      score: 760,
-    },
-    {
-      id: 4,
-      wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
-      score: 490,
-    },
-    {
-      id: 5,
-      wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-      score: 389,
-    },
-    {
-      id: 6,
-      wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
-      score: 386,
-    },
-    {
-      id: 7,
-      wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-      score: 270,
-    },
-    {
-      id: 8,
-      wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
-      score: 240,
-    },
-    {
-      id: 9,
-      wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-      score: 211,
-    },
-    {
-      id: 10,
-      wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
-      score: 192,
-    },
-    {
-      id: 11,
-      wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-      score: 187,
-    },
-    {
-      id: 12,
-      wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
-      score: 154,
-    },
-    {
-      id: 13,
-      wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-      score: 133,
-    },
-    {
-      id: 14,
-      wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
-      score: 122,
-    },
-    {
-      id: 15,
-      wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-      score: 121,
-    },
-    {
-      id: 16,
-      wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
-      score: 120,
-    },
-    {
-      id: 17,
-      wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-      score: 101,
-    },
-    {
-      id: 18,
-      wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
-      score: 99,
-    },
-    {
-      id: 19,
-      wallet: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-      score: 96,
-    },
-    {
-      id: 20,
-      wallet: "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJU",
-      score: 95,
-    },
-  ]);
-  const [offset, setOffset] = useState(1);
+export function LeaderBoard({ wallet, className }) {
+  const [page, setPage] = useState(1);
+  const [onlyMe, setOnlyMe] = useState(false);
+  const { data } = useLeaderBoard(page, onlyMe ? wallet : "");
+
+  const handleNext = () => {
+    if (!data) return;
+    if (page === data.total) return;
+    setPage(page + 1);
+  };
+
+  const handlePrev = () => {
+    if (!data) return;
+    if (page === 1) return;
+    setPage(page - 1);
+  };
+
+  const handleFirst = () => {
+    if (!data) return;
+    setPage(1);
+  };
+
+  const handleLast = () => {
+    if (!data) return;
+    setPage(data.total);
+  };
 
   return (
     <Panel className={className}>
@@ -118,7 +41,7 @@ export function LeaderBoard({ className }) {
       <PanelBody>
         <CheckboxWrapper>
           <Checkbox
-            checked={false}
+            checked={onlyMe}
             icon={<FaCheck color={colors.orange} />}
             borderColor={colors.orange}
             size={18}
@@ -128,26 +51,29 @@ export function LeaderBoard({ className }) {
               marginLeft: 10,
               cursor: "pointer",
             }}
+            onChange={(value) => setOnlyMe(value)}
           />
         </CheckboxWrapper>
-        <ScoreList>
-          {games.map((game, i) => (
-            <ScoreItem key={game.id}>
-              <ScoreItemRank>{`#${offset + i}`}</ScoreItemRank>
-              <ScoreItemScore>{game.score}</ScoreItemScore>
-              <ScoreItemAddress>
-                {formatWalletAddress(game.wallet)}
-                <CopyIcon title={game.wallet} />
-              </ScoreItemAddress>
-            </ScoreItem>
-          ))}
-        </ScoreList>
+        {data && (
+          <ScoreList>
+            {data.games.map((game, i) => (
+              <ScoreItem key={game.id}>
+                <ScoreItemRank>{`#${page + i}`}</ScoreItemRank>
+                <ScoreItemScore>{game.score}</ScoreItemScore>
+                <ScoreItemAddress>
+                  {formatWalletAddress(game.player_wallet)}
+                  <CopyIcon title={game.player_wallet} />
+                </ScoreItemAddress>
+              </ScoreItem>
+            ))}
+          </ScoreList>
+        )}
       </PanelBody>
       <StyledPanelFooter>
-        <Button variant="text" size="small">
+        <Button variant="text" size="small" onClick={handleFirst}>
           First
         </Button>
-        <Button variant="text" size="small">
+        <Button variant="text" size="small" onClick={handlePrev}>
           Prev
         </Button>
         <PageText
@@ -155,7 +81,7 @@ export function LeaderBoard({ className }) {
             marginLeft: "auto",
           }}
         >
-          Page 1 / 156
+          Page {page} / {data?.total}
         </PageText>
         <Button
           variant="text"
@@ -163,10 +89,11 @@ export function LeaderBoard({ className }) {
           style={{
             marginLeft: "auto",
           }}
+          onClick={handleNext}
         >
           Next
         </Button>
-        <Button variant="text" size="small">
+        <Button variant="text" size="small" onClick={handleLast}>
           Last
         </Button>
       </StyledPanelFooter>

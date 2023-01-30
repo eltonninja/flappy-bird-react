@@ -116,7 +116,7 @@ export function Home({ account, disconnect, myAlgoConnect }) {
           address={account?.address}
           handleAfterFinished={handleAfterGameFinished}
         />
-        <StyledLeaderBoard />
+        <StyledLeaderBoard wallet={account?.address} />
       </Main>
     </Wrapper>
   );
@@ -134,7 +134,7 @@ const Main = styled.main({
 });
 
 const StyledPrizes = styled(Prizes)({
-  flexGrow: 1,
+  width: "calc(50% - 187.5px)",
   height: "576px !important",
 });
 
@@ -144,6 +144,6 @@ const StyledGame = styled(Game)({
 });
 
 const StyledLeaderBoard = styled(LeaderBoard)({
-  flexGrow: 1,
+  width: "calc(50% - 187.5px)",
   height: "576px !important",
 });
