@@ -9,7 +9,10 @@ export function useLeaderBoard(page, wallet) {
         .get(
           `${process.env.REACT_APP_API_URL}/leaderboard?page=${page}&wallet=${wallet}`
         )
-        .then((res) => res.data)
+        .then((res) => res.data),
+    {
+      refetchInterval: 5000,
+    }
   );
 
   return { data, isLoading, isError, error };
