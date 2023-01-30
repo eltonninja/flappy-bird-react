@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import colors from "../values/colors";
 import { Button } from "./lib";
-import { FaRegCopy } from "react-icons/fa";
+import { FaExclamationTriangle, FaRegCopy } from "react-icons/fa";
 import SvgAlgoIcon from "../assets/AlgoIcon";
 import { formatWalletAddress } from "../utils";
 
@@ -44,7 +44,9 @@ export function Header({
                 onClick={purchase}
                 isLoadingBalance={isLoadingBalance}
                 disabled={isPurchasing}
+                title="You should purchase 4 algo, or your score won't be recorded."
               >
+                {isPurchasing || <FaExclamationTriangle />}
                 {isPurchasing ? "Purchasing ..." : "Purchase"}
               </PurchaseButton>
             </>
@@ -112,6 +114,11 @@ const AlgoIcon = styled(SvgAlgoIcon)({
 });
 
 const PurchaseButton = styled(Button)({
+  display: "flex",
+  alignItems: "center",
+  "& > svg": {
+    marginRight: 5,
+  },
   marginLeft: ({ isLoadingBalance }) => (isLoadingBalance ? "auto" : "20px"),
 });
 const PurchasedButton = styled(Button)({
@@ -161,9 +168,6 @@ const StyledScore = styled(Score)({
     height: 8,
     border: `1px solid ${colors.orange}`,
     borderRadius: "100%",
-    background: ({ value }) =>
-      value === -1 || value === undefined || value === null
-        ? colors.white
-        : colors.orange,
+    background: ({ value }) => (value === -1 ? colors.white : colors.orange),
   },
 });

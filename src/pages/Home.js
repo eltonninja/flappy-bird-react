@@ -82,8 +82,7 @@ export function Home({ account, disconnect, myAlgoConnect }) {
           purchase_tx: sendTx.txId,
         })
         .then((res) => {
-          console.log(res);
-          queryClient.setQueryData(["last-game", account?.address], res);
+          queryClient.setQueryData(["last-game", account?.address], res.data);
           setIsPurchasing(false);
         })
         .catch((err) => {
