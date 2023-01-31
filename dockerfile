@@ -1,0 +1,27 @@
+FROM node:16 as build-stage
+
+WORKDIR /flappy-bird-react
+COPY package.json .
+RUN npm install
+COPY . .
+
+ARG REACT_APP_SERVER_HOST
+ENV REACT_APP_SERVER_HOST=$REACT_APP_SERVER_HOST
+
+ARG REACT_APP_API_URL
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+
+ARG REACT_APP_PRIZE_WALLET
+ENV REACT_APP_PRIZE_WALLET=$REACT_APP_PRIZE_WALLET
+
+ARG REACT_APP_PURCHASE_AMOUNT
+ENV REACT_APP_PURCHASE_AMOUNT=4
+
+RUN npm run build
+
+FROM nginx:1.17.0-alpine
+
+COPY --from=build-stage /flappy-bird-react/build /usr/share/nginx/html
+EXPOSE $REACT_DOCKER_PORT
+
+CMD nginx -g 'daemon off;'
