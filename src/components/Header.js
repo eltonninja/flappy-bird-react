@@ -29,15 +29,17 @@ export function Header({
           {balance} <AlgoIcon width={16} height={16} fill={colors.orange} />
         </BalanceText>
       )}
-      {lastGame && (
+      {isLoadingLastGame && (
         <>
-          <Scores>
-            <StyledScore value={lastGame["score1"]} />
-            <StyledScore value={lastGame["score2"]} />
-            <StyledScore value={lastGame["score3"]} />
-            <StyledScore value={lastGame["score4"]} />
-          </Scores>
-          {lastGame["score4"] > -1 ? (
+          {lastGame && (
+            <Scores>
+              <StyledScore value={lastGame["score1"]} />
+              <StyledScore value={lastGame["score2"]} />
+              <StyledScore value={lastGame["score3"]} />
+              <StyledScore value={lastGame["score4"]} />
+            </Scores>
+          )}
+          {!lastGame || lastGame["score4"] > -1 ? (
             <>
               <PurchaseButton
                 onClick={purchase}
