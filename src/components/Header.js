@@ -29,7 +29,7 @@ export function Header({
           {balance} <AlgoIcon width={16} height={16} fill={colors.orange} />
         </BalanceText>
       )}
-      {isLoadingLastGame && (
+      {!isLoadingLastGame && (
         <>
           {lastGame && (
             <Scores>
