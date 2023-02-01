@@ -11,7 +11,8 @@ import { useLeaderBoard } from "../hooks";
 export function LeaderBoard({ wallet, className }) {
   const [page, setPage] = useState(1);
   const [onlyMe, setOnlyMe] = useState(false);
-  const { data } = useLeaderBoard(page, onlyMe ? wallet : "");
+  const [sortByScore, setSortByScore] = useState(false);
+  const { data } = useLeaderBoard(page, onlyMe ? wallet : "", sortByScore);
 
   const handleNext = () => {
     if (!data) return;
@@ -39,8 +40,8 @@ export function LeaderBoard({ wallet, className }) {
     <Panel className={className}>
       <PanelHead>Leader Board</PanelHead>
       <PanelBody>
-        {wallet && (
-          <CheckboxWrapper>
+        <OptionsWrapper>
+          {wallet && (
             <Checkbox
               checked={onlyMe}
               icon={<FaCheck color={colors.orange} />}
@@ -54,8 +55,24 @@ export function LeaderBoard({ wallet, className }) {
               }}
               onChange={(value) => setOnlyMe(value)}
             />
-          </CheckboxWrapper>
-        )}
+          )}
+          <Checkbox
+            checked={sortByScore}
+            icon={<FaCheck color={colors.orange} />}
+            borderColor={colors.orange}
+            size={18}
+            label="Sort by score"
+            labelStyle={{
+              color: colors.orange,
+              marginLeft: 10,
+              cursor: "pointer",
+            }}
+            containerStyle={{
+              marginLeft: "auto",
+            }}
+            onChange={(value) => setSortByScore(value)}
+          />
+        </OptionsWrapper>
         {data && (
           <ScoreList>
             {data.games.map((game, i) => (
@@ -148,9 +165,8 @@ const PageText = styled.p({
   fontWeight: 700,
 });
 
-const CheckboxWrapper = styled.div({
+const OptionsWrapper = styled.div({
   display: "flex",
-  justifyContent: "left",
   paddingLeft: 10,
   marginBottom: 10,
 });
