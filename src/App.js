@@ -8,19 +8,19 @@ function App() {
   const myAlgoConnectRef = useRef();
 
   const connect = async () => {
-    // const myAlgoConnect = new MyAlgoConnect();
-    // const accountsSharedByUser = await myAlgoConnect.connect({
-    //   shouldSelectOneAccount: true,
-    // });
-    // if (!accountsSharedByUser || accountsSharedByUser.length === 0) return;
-    // setAccount(accountsSharedByUser[0]);
-
-    // myAlgoConnectRef.current = myAlgoConnect;
-    
-    setAccount({
-      address: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-      name: "Lazaro",
+    const myAlgoConnect = new MyAlgoConnect();
+    const accountsSharedByUser = await myAlgoConnect.connect({
+      shouldSelectOneAccount: true,
     });
+    if (!accountsSharedByUser || accountsSharedByUser.length === 0) return;
+    setAccount(accountsSharedByUser[0]);
+
+    myAlgoConnectRef.current = myAlgoConnect;
+    
+    // setAccount({
+    //   address: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
+    //   name: "Lazaro",
+    // });
   };
 
   const disconnect = () => {
