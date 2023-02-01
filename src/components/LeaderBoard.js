@@ -58,7 +58,7 @@ export function LeaderBoard({ wallet, className }) {
           <ScoreList>
             {data.games.map((game, i) => (
               <ScoreItem key={game.id}>
-                <ScoreItemRank>{`#${page + i}`}</ScoreItemRank>
+                <ScoreItemRank>{`#${(page - 1) * 20 + i + 1}`}</ScoreItemRank>
                 <ScoreItemScore>{game.score}</ScoreItemScore>
                 <ScoreItemAddress>
                   {formatWalletAddress(game.player_wallet)}
