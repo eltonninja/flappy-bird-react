@@ -119,16 +119,16 @@ const Main = styled.main({
 });
 
 const StyledPrizes = styled(Prizes)({
-  width: "calc(50% - 162.5px)",
+  width: "calc(50% - 172px)",
   height: "576px !important",
 });
 
 const StyledGame = styled(Game)({
-  width: "325px !important",
+  width: "324px !important",
   height: "576px !important",
 });
 
 const StyledLeaderBoard = styled(LeaderBoard)({
-  width: "calc(50% - 162.5px)",
+  width: "calc(50% - 172px)",
   height: "576px !important",
 });

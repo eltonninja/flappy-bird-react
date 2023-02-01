@@ -3,7 +3,17 @@ import styled from "styled-components";
 import colors from "../../values/colors";
 import { initializeGame } from "./game";
 
-export function Game({ address, handleAfterFinished, disabled, className }) {
+export function Game({
+  address,
+  handleAfterFinished,
+  disabled,
+  onClick,
+  className,
+}) {
+  const handleClick = () => {
+    if (disabled) onClick();
+  };
+
   useEffect(() => {
     const { game, socket } = initializeGame({
       afterFinished: handleAfterFinished,
@@ -17,7 +27,9 @@ export function Game({ address, handleAfterFinished, disabled, className }) {
     };
   }, [address, disabled, handleAfterFinished]);
 
-  return <Wrapper id="game" className={className}></Wrapper>;
+  return (
+    <Wrapper id="game" onClick={handleClick} className={className}></Wrapper>
+  );
 }
 
 const Wrapper = styled.div({
