@@ -11,6 +11,7 @@ import algosdk from "algosdk";
 import styled from "styled-components";
 import { useBalance, useLastGame } from "../hooks";
 import axios from "axios";
+import { FAQ } from "../components/FAQ";
 
 const baseServer = "https://testnet-algorand.api.purestake.io/ps2";
 const port = "";
@@ -101,6 +102,7 @@ export function Home({ account, disconnect, myAlgoConnect }) {
           handleAfterFinished={handleAfterGameFinished}
         />
         <StyledLeaderBoard wallet={account?.address} />
+        <StyledFAQ />
       </Main>
     </Wrapper>
   );
@@ -110,6 +112,7 @@ const Wrapper = styled.div({});
 
 const Main = styled.main({
   display: "flex",
+  flexWrap: "wrap",
   justifyContent: "center",
   padding: 10,
   paddingTop: 0,
@@ -131,4 +134,8 @@ const StyledGame = styled(Game)({
 const StyledLeaderBoard = styled(LeaderBoard)({
   width: "calc(50% - 172px)",
   height: "576px !important",
+});
+
+const StyledFAQ = styled(FAQ)({
+  width: "100%",
 });
