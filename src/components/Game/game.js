@@ -6,7 +6,7 @@ export function initializeGame({
   flapPower = 200,
   gravity = 500,
   gapSize = 120,
-  beforeStart,
+  disabled = false,
   afterFinished,
   address,
 } = {}) {
@@ -210,9 +210,11 @@ export function initializeGame({
    */
   let score;
 
-  const socket = io(process.env.REACT_APP_SERVER_HOST);
-  socket.on("game:finished", afterFinished);
-
+  let socket;
+  if (!disabled) {
+    socket = io(process.env.REACT_APP_SERVER_HOST);
+    socket.on("game:finished", afterFinished);
+  }
   /**
    *   Load the game assets.
    */
@@ -526,6 +528,7 @@ export function initializeGame({
    * Move the bird in the screen.
    */
   function flapBird() {
+    if (disabled) return;
     if (gameOver) return;
 
     if (!gameStarted) startGame(game.scene.scenes[0]);
@@ -649,23 +652,20 @@ export function initializeGame({
    * @param {object} scene - Game scene.
    */
   function startGame(scene) {
-    beforeStart().then((ok) => {
-      if (!ok) return;
-      gameStarted = true;
-      messageInitial.visible = false;
+    gameStarted = true;
+    messageInitial.visible = false;
 
-      const score0 = scoreboardGroup.create(
-        assets.scene.width,
-        30,
-        assets.scoreboard.number0
-      );
-      score0.setDepth(20);
+    const score0 = scoreboardGroup.create(
+      assets.scene.width,
+      30,
+      assets.scoreboard.number0
+    );
+    score0.setDepth(20);
 
-      makePipes(scene);
+    makePipes(scene);
 
-      socket.emit("game:started", {
-        address,
-      });
+    socket.emit("game:started", {
+      address,
     });
   }
   return { game, socket };

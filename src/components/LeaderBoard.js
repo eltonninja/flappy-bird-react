@@ -39,21 +39,23 @@ export function LeaderBoard({ wallet, className }) {
     <Panel className={className}>
       <PanelHead>Leader Board</PanelHead>
       <PanelBody>
-        <CheckboxWrapper>
-          <Checkbox
-            checked={onlyMe}
-            icon={<FaCheck color={colors.orange} />}
-            borderColor={colors.orange}
-            size={18}
-            label="Show me only"
-            labelStyle={{
-              color: colors.orange,
-              marginLeft: 10,
-              cursor: "pointer",
-            }}
-            onChange={(value) => setOnlyMe(value)}
-          />
-        </CheckboxWrapper>
+        {wallet && (
+          <CheckboxWrapper>
+            <Checkbox
+              checked={onlyMe}
+              icon={<FaCheck color={colors.orange} />}
+              borderColor={colors.orange}
+              size={18}
+              label="Show me only"
+              labelStyle={{
+                color: colors.orange,
+                marginLeft: 10,
+                cursor: "pointer",
+              }}
+              onChange={(value) => setOnlyMe(value)}
+            />
+          </CheckboxWrapper>
+        )}
         {data && (
           <ScoreList>
             {data.games.map((game, i) => (
@@ -104,6 +106,7 @@ export function LeaderBoard({ wallet, className }) {
 const ScoreList = styled.ul({
   listStyle: "none",
   padding: 0,
+  margin: 0,
 });
 
 const ScoreItem = styled.li({
@@ -149,4 +152,5 @@ const CheckboxWrapper = styled.div({
   display: "flex",
   justifyContent: "left",
   paddingLeft: 10,
+  marginBottom: 10,
 });

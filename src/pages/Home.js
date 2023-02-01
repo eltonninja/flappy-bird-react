@@ -21,18 +21,6 @@ const token = {
 const algodclient = new algosdk.Algodv2(token, baseServer, port);
 
 export function Home({ account, disconnect, myAlgoConnect }) {
-  const [top10Wallets, setTop10Wallets] = useState([
-    "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH1",
-    "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJ2",
-    "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH3",
-    "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJ4",
-    "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH5",
-    "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJ6",
-    "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH7",
-    "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJ8",
-    "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH9",
-    "UGWVE6DWK6UOPSJFSFIMYOWFD5ZK6U56CGWDXOVPS6A5P4HPEUWLZKPCJ0",
-  ]);
   const { data: balance, isLoading: isLoadingBalance } = useBalance(
     account?.address,
     algodclient
@@ -107,11 +95,7 @@ export function Home({ account, disconnect, myAlgoConnect }) {
         disconnect={disconnect}
       />
       <Main>
-        <StyledPrizes
-          prizeWallet={process.env.REACT_APP_PRIZE_WALLET}
-          prizeAlgo={108243}
-          top10Wallets={top10Wallets}
-        />
+        <StyledPrizes prizeWallet={process.env.REACT_APP_PRIZE_WALLET} />
         <StyledGame
           address={account?.address}
           handleAfterFinished={handleAfterGameFinished}
@@ -128,13 +112,14 @@ const Main = styled.main({
   display: "flex",
   justifyContent: "center",
   padding: 10,
+  paddingTop: 0,
   position: "relative",
   width: "100%",
   gap: 10,
 });
 
 const StyledPrizes = styled(Prizes)({
-  width: "calc(50% - 187.5px)",
+  width: "calc(50% - 162.5px)",
   height: "576px !important",
 });
 
@@ -144,6 +129,6 @@ const StyledGame = styled(Game)({
 });
 
 const StyledLeaderBoard = styled(LeaderBoard)({
-  width: "calc(50% - 187.5px)",
+  width: "calc(50% - 162.5px)",
   height: "576px !important",
 });

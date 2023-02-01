@@ -3,21 +3,19 @@ import styled from "styled-components";
 import colors from "../../values/colors";
 import { initializeGame } from "./game";
 
-export function Game({ address, className, handleAfterFinished }) {
+export function Game({ address, handleAfterFinished, disabled, className }) {
   useEffect(() => {
     const { game, socket } = initializeGame({
-      beforeStart: async () => {
-        return true;
-      },
       afterFinished: handleAfterFinished,
+      disabled,
       address,
     });
     return () => {
       game.canvas.remove();
       game.destroy();
-      socket.disconnect();
+      socket?.disconnect();
     };
-  }, [address, handleAfterFinished]);
+  }, [address, disabled, handleAfterFinished]);
 
   return <Wrapper id="game" className={className}></Wrapper>;
 }
