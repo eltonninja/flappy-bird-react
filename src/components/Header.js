@@ -61,7 +61,14 @@ export function Header({
                 title="You should purchase 4 algo, or your score won't be recorded."
               >
                 {isPurchasing || <FaExclamationTriangle />}
-                {isPurchasing ? "Purchasing ..." : "Purchase"}
+                {isPurchasing ? (
+                  <>
+                    <Loader />
+                    Purchasing
+                  </>
+                ) : (
+                  "Purchase"
+                )}
               </PurchaseButton>
               <PurchaseIconButton
                 onClick={purchase}
@@ -70,11 +77,7 @@ export function Header({
                   marginLeft: isLoadingBalance ? "auto" : "10px",
                 }}
               >
-                {isPurchasing ? (
-                  <Loader size={20} />
-                ) : (
-                  <FaCartPlus size={20} />
-                )}
+                {isPurchasing ? <Loader size={20} /> : <FaCartPlus size={20} />}
               </PurchaseIconButton>
             </>
           ) : (
@@ -242,6 +245,10 @@ const PurchasedButton = styled(Button)({
   display: "none",
   "@media (min-width: 1024px)": {
     display: "flex",
+    alignItems: "center",
+    "& > svg": {
+      marginRight: 5,
+    },
   },
   order: 5,
 });
