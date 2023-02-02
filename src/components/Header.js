@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import colors from "../values/colors";
-import { Button } from "./lib";
+import { Button, Loader } from "./lib";
 import {
   FaExclamationTriangle,
   FaRegCopy,
   FaPowerOff,
   FaCartPlus,
+  FaSpinner,
 } from "react-icons/fa";
 import SvgAlgoIcon from "../assets/AlgoIcon";
 import { formatWalletAddress } from "../utils";
@@ -64,11 +65,16 @@ export function Header({
               </PurchaseButton>
               <PurchaseIconButton
                 onClick={purchase}
+                disabled={isPurchasing}
                 style={{
                   marginLeft: isLoadingBalance ? "auto" : "10px",
                 }}
               >
-                <FaCartPlus size={20} />
+                {isPurchasing ? (
+                  <Loader size={20} />
+                ) : (
+                  <FaCartPlus size={20} />
+                )}
               </PurchaseIconButton>
             </>
           ) : (
