@@ -110,38 +110,63 @@ export function Home({ account, disconnect, myAlgoConnect }) {
   );
 }
 
-const Wrapper = styled.div({});
+const Wrapper = styled.div({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+});
 
 const Main = styled.main({
   display: "flex",
   flexWrap: "wrap",
   justifyContent: "center",
+  alignItems: "center",
   padding: 10,
   paddingTop: 0,
   position: "relative",
   width: "100%",
   gap: 10,
+  flexDirection: "column",
+  "@media (min-width: 1024px)": {
+    flexDirection: "row",
+  },
 });
 
 const StyledPrizes = styled(Prizes)({
-  width: "calc(50% - 172px)",
-  height: "576px !important",
+  width: "100%",
+  order: 2,
+  "@media (min-width: 1024px)": {
+    order: 1,
+    width: "calc(50% - 172px)",
+    height: "576px !important",
+  },
 });
 
 const StyledGame = styled(Game)({
-  width: "324px !important",
-  height: "576px !important",
+  width: "100% !important",
+  order: 1,
+  "@media (min-width: 1024px)": {
+    order: 2,
+    width: "324px !important",
+    height: "576px !important",
+  },
 });
 
 const StyledLeaderBoard = styled(LeaderBoard)({
-  width: "calc(50% - 172px)",
-  height: "576px !important",
+  width: "100%",
+  order: 3,
+  "@media (min-width: 1024px)": {
+    width: "calc(50% - 172px)",
+    height: "576px !important",
+  },
 });
 
 const StyledFAQ = styled(FAQ)({
   width: "100%",
+  order: 4,
 });
 
 const StyledCompetitionHistory = styled(CompetitionHistory)({
   width: "100%",
+  order: 5,
 });

@@ -1,7 +1,12 @@
 import styled from "styled-components";
 import colors from "../values/colors";
 import { Button } from "./lib";
-import { FaExclamationTriangle, FaRegCopy } from "react-icons/fa";
+import {
+  FaExclamationTriangle,
+  FaRegCopy,
+  FaPowerOff,
+  FaCartPlus,
+} from "react-icons/fa";
 import SvgAlgoIcon from "../assets/AlgoIcon";
 import { formatWalletAddress } from "../utils";
 
@@ -29,6 +34,14 @@ export function Header({
           {balance} <AlgoIcon width={16} height={16} fill={colors.orange} />
         </BalanceText>
       )}
+      {isLoadingLastGame && (
+        <DisconnectIconButton
+          onClick={disconnect}
+          style={{ width: "100%", justifyContent: "right" }}
+        >
+          <FaPowerOff size={20} />
+        </DisconnectIconButton>
+      )}
       {!isLoadingLastGame && (
         <>
           {lastGame && (
@@ -49,6 +62,14 @@ export function Header({
                 {isPurchasing || <FaExclamationTriangle />}
                 {isPurchasing ? "Purchasing ..." : "Purchase"}
               </PurchaseButton>
+              <PurchaseIconButton
+                onClick={purchase}
+                style={{
+                  marginLeft: isLoadingBalance ? "auto" : "10px",
+                }}
+              >
+                <FaCartPlus size={20} />
+              </PurchaseIconButton>
             </>
           ) : (
             <PurchasedButton
@@ -65,6 +86,9 @@ export function Header({
             </PurchasedButton>
           )}
           <DisconnectButton onClick={disconnect}>Disconnect</DisconnectButton>
+          <DisconnectIconButton onClick={disconnect}>
+            <FaPowerOff size={20} />
+          </DisconnectIconButton>
         </>
       )}
     </Wrapper>
@@ -74,8 +98,11 @@ export function Header({
 const Wrapper = styled.header({
   position: "relative",
   display: "flex",
+  flexWrap: "wrap",
   padding: 10,
   alignItems: "center",
+  width: "100%",
+  gap: "6px 0",
 });
 
 const NameText = styled.p({
@@ -83,29 +110,42 @@ const NameText = styled.p({
   textTransform: "uppercase",
   fontWeight: 900,
   color: colors.orange,
+  order: 1,
+  "@media (min-width: 1024px)": {
+    fontSize: 24,
+  },
 });
 
 const AddressText = styled.p({
   fontSize: 13,
   color: colors.orange,
-  marginLeft: 10,
+  marginLeft: "auto",
   display: "flex",
   alignItems: "center",
+  order: 2,
   "& > svg": {
     marginLeft: 5,
     cursor: "pointer",
   },
+  "@media (min-width: 1024px)": {
+    marginLeft: 10,
+  },
 });
 
 const BalanceText = styled.p({
-  marginLeft: 12,
   display: "flex",
+  marginLeft: "auto",
   alignItems: "center",
   fontSize: 20,
   fontWeight: 700,
   color: colors.orange,
+  order: 4,
   "& > img": {
     marginLeft: 5,
+  },
+  "@media (min-width: 1024px)": {
+    marginLeft: 12,
+    order: 3,
   },
 });
 
@@ -113,39 +153,18 @@ const AlgoIcon = styled(SvgAlgoIcon)({
   marginLeft: 3,
 });
 
-const PurchaseButton = styled(Button)({
-  display: "flex",
-  alignItems: "center",
-  marginLeft: "auto",
-  "& > svg": {
-    marginRight: 5,
-  },
-});
-const PurchasedButton = styled(Button)({
-  color: colors.orange,
-  marginLeft: ({ isLoadingBalance }) => (isLoadingBalance ? "auto" : "20px"),
-  "&:hover": {
-    color: colors.white,
-  },
-});
-const DisconnectButton = styled(Button)({
-  color: colors.orange,
-  marginLeft: 5,
-  "&:hover": {
-    color: colors.white,
-  },
-});
-DisconnectButton.defaultProps = {
-  variant: "text",
-};
-
 const Scores = styled.p({
-  position: "absolute",
-  left: "50%",
-  transform: "translateX(-50%)",
   display: "flex",
+  justifyContent: "right",
   alignItems: "center",
   gap: 20,
+  order: 3,
+  "@media (min-width: 1024px)": {
+    position: "absolute",
+    transform: "translateX(-50%)",
+    left: "50%",
+    order: 4,
+  },
 });
 
 const Score = ({ value, className }) => {
@@ -154,9 +173,9 @@ const Score = ({ value, className }) => {
 
 const StyledScore = styled(Score)({
   position: "relative",
-  paddingLeft: 15,
   color: colors.orange,
-  fontSize: 24,
+  paddingLeft: 12,
+  fontSize: 18,
   fontWeight: 900,
   "&:before": {
     content: '""',
@@ -164,10 +183,85 @@ const StyledScore = styled(Score)({
     left: 0,
     top: "50%",
     transform: "translateY(-50%)",
-    width: 8,
-    height: 8,
+    width: 6,
+    height: 6,
     border: `1px solid ${colors.orange}`,
     borderRadius: "100%",
     background: ({ value }) => (value === -1 ? colors.white : colors.orange),
   },
+  "@media (min-width: 1024px)": {
+    paddingLeft: 15,
+    fontSize: 24,
+    fontWeight: 900,
+    "&:before": {
+      width: 8,
+      height: 8,
+    },
+  },
+});
+
+const IconButton = styled.button({
+  border: "none",
+  margin: 0,
+  padding: 0,
+  background: "none",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  color: colors.orange,
+  "@media (min-width: 1024px)": {
+    display: "none",
+  },
+});
+
+const PurchaseButton = styled(Button)({
+  alignItems: "center",
+  marginLeft: "auto",
+  "& > svg": {
+    marginRight: 5,
+  },
+  display: "none",
+  order: 5,
+  "@media (min-width: 1024px)": {
+    display: "flex",
+  },
+});
+
+const PurchasedButton = styled(Button)({
+  color: colors.orange,
+  marginLeft: ({ isLoadingBalance }) => (isLoadingBalance ? "auto" : "20px"),
+  "&:hover": {
+    color: colors.white,
+  },
+  display: "none",
+  "@media (min-width: 1024px)": {
+    display: "flex",
+  },
+  order: 5,
+});
+
+const DisconnectButton = styled(Button)({
+  color: colors.orange,
+  marginLeft: 5,
+  "&:hover": {
+    color: colors.white,
+  },
+  display: "none",
+  "@media (min-width: 1024px)": {
+    display: "flex",
+  },
+  order: 6,
+});
+DisconnectButton.defaultProps = {
+  variant: "text",
+};
+
+const PurchaseIconButton = styled(IconButton)({
+  marginLeft: 10,
+  order: 5,
+});
+
+const DisconnectIconButton = styled(IconButton)({
+  marginLeft: 10,
+  order: 6,
 });

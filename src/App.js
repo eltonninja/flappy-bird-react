@@ -20,7 +20,7 @@ function App() {
     // Reconnect to the session when the component is mounted
     peraWallet.reconnectSession().then((accounts) => {
       // Setup the disconnect event listener
-      peraWallet.connector?.on("disconnect", handleDisconnectWalletClick);
+      peraWallet.connector?.on("disconnect", disconnect);
 
       if (peraWallet.isConnected && accounts.length) {
         setAccount({ account: accounts[0] });
@@ -33,24 +33,19 @@ function App() {
   };
 
   const connectWithMyalgo = async () => {
-    const myAlgoConnect = new MyAlgoConnect();
-    const accountsSharedByUser = await myAlgoConnect.connect({
-      shouldSelectOneAccount: true,
-    });
-    if (!accountsSharedByUser || accountsSharedByUser.length === 0) return;
-    setAccount(accountsSharedByUser[0]);
-
-    myAlgoConnectRef.current = myAlgoConnect;
-
-    // setAccount({
-    //   address: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
-    //   name: "Lazaro",
+    // const myAlgoConnect = new MyAlgoConnect();
+    // const accountsSharedByUser = await myAlgoConnect.connect({
+    //   shouldSelectOneAccount: true,
     // });
-  };
+    // if (!accountsSharedByUser || accountsSharedByUser.length === 0) return;
+    // setAccount(accountsSharedByUser[0]);
 
-  const handleDisconnectWalletClick = () => {
-    peraWallet.disconnect();
-    setAccount(null);
+    // myAlgoConnectRef.current = myAlgoConnect;
+
+    setAccount({
+      address: "TKUY27ZHDWQJNCUAGLTBH735INOOEGIZHBO2QUWMGMAUWYZ6O5OZM5OHH4",
+      name: "Lazaro",
+    });
   };
 
   const connectWithPera = () => {
@@ -58,7 +53,7 @@ function App() {
       .connect()
       .then((newAccounts) => {
         // Setup the disconnect event listener
-        peraWallet.connector?.on("disconnect", handleDisconnectWalletClick);
+        peraWallet.connector?.on("disconnect", disconnect);
 
         setAccount({
           address: newAccounts[0],
@@ -74,7 +69,9 @@ function App() {
       });
   };
   const disconnect = () => {
+    peraWallet?.disconnect();
     setAccount(null);
+    setWalletTypeModal(false);
   };
 
   return account ? (

@@ -12,10 +12,13 @@ const PanelHead = styled.div({
   color: colors.white,
   background: colors.darkOrange2,
   textAlign: "center",
-  fontSize: 24,
   textTransform: "uppercase",
   fontWeight: 900,
   padding: 3,
+  fontSize: 20,
+  "@media (min-width: 1024px)": {
+    fontSize: 24,
+  },
 });
 
 const PanelBody = styled.div({

@@ -39,7 +39,7 @@ export function LeaderBoard({ wallet, className }) {
   return (
     <Panel className={className}>
       <PanelHead>Leader Board</PanelHead>
-      <PanelBody>
+      <StyledPanelBody>
         <OptionsWrapper>
           {wallet && (
             <Checkbox
@@ -87,7 +87,7 @@ export function LeaderBoard({ wallet, className }) {
             ))}
           </ScoreList>
         )}
-      </PanelBody>
+      </StyledPanelBody>
       <StyledPanelFooter>
         <Button variant="text" size="small" onClick={handleFirst}>
           First
@@ -130,31 +130,56 @@ const ScoreItem = styled.li({
   color: colors.orange,
   display: "flex",
   alignItems: "center",
-  fontSize: 16,
+  fontSize: 14,
+  "@media (min-width: 1024px)": {
+    fontSize: 16,
+  },
 });
 
 const ScoreItemRank = styled.p({
-  width: 40,
   textAlign: "right",
+  width: 30,
+  "@media (min-width: 1024px)": {
+    width: 40,
+  },
 });
 const ScoreItemScore = styled.p({
-  marginLeft: 30,
   flexGrow: 1,
   textAlign: "right",
   fontSize: "1.2em",
   fontWeight: 700,
+  marginLeft: 10,
+  "@media (min-width: 1024px)": {
+    fontSize: "1.2em",
+    marginLeft: 30,
+  },
 });
 const ScoreItemAddress = styled.p({
-  fontFamily: "monospace",
-  fontSize: "1.2em",
   display: "flex",
+  justifyContent: "right",
   alignItems: "center",
-  marginLeft: 30,
+  marginLeft: 10,
+  width: 220,
+  "@media (min-width: 1024px)": {
+    // fontSize: "1.2em",
+    width: 300,
+    marginLeft: 30,
+  },
 });
 
 const CopyIcon = styled(FaRegCopy)({
-  marginLeft: 10,
   cursor: "pointer",
+  marginLeft: 5,
+  "@media (min-width: 1024px)": {
+    marginLeft: 10,
+  },
+});
+
+const StyledPanelBody = styled(PanelBody)({
+  height: 500,
+  "@media (min-width: 1024px)": {
+    height: "initial",
+  },
 });
 
 const StyledPanelFooter = styled(PanelFooter)({

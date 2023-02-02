@@ -5,6 +5,8 @@ import { LeaderBoard } from "../components/LeaderBoard";
 import { Button } from "../components/lib";
 import { Prizes } from "../components/Prizes";
 import colors from "../values/colors";
+import { FAQ } from "../components/FAQ";
+import { CompetitionHistory } from "../components/CompetitionHistory";
 
 export function ConnectWallet({ handleConnect }) {
   return (
@@ -19,42 +21,24 @@ export function ConnectWallet({ handleConnect }) {
         <StyledPrizes prizeWallet={process.env.REACT_APP_PRIZE_WALLET} />
         <StyledGame disabled onClick={handleConnect} />
         <StyledLeaderBoard />
+        <StyledFAQ />
+        <StyledCompetitionHistory />
       </Main>
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div({});
-
-const Header = styled.header({
+const Wrapper = styled.div({
   display: "flex",
-  padding: 10,
+  flexDirection: "column",
   alignItems: "center",
 });
 
-const Main = styled.main({
+const Header = styled.header({
   display: "flex",
-  justifyContent: "center",
-  padding: 10,
-  paddingTop: 0,
-  position: "relative",
+  alignItems: "center",
   width: "100%",
-  gap: 10,
-});
-
-const StyledPrizes = styled(Prizes)({
-  width: "calc(50% - 172px)",
-  height: "576px !important",
-});
-
-const StyledGame = styled(Game)({
-  width: "324px !important",
-  height: "576px !important",
-});
-
-const StyledLeaderBoard = styled(LeaderBoard)({
-  width: "calc(50% - 172px)",
-  height: "576px !important",
+  padding: 10,
 });
 
 const LogoText = styled.p({
@@ -62,6 +46,51 @@ const LogoText = styled.p({
   textTransform: "uppercase",
   fontSize: 24,
   fontWeight: 900,
+  // display: "none",
+  // "@media (min-width: 1024px)": {
+  //   display: "block",
+  // },
+});
+
+const Main = styled.main({
+  display: "flex",
+  flexWrap: "wrap",
+  justifyContent: "center",
+  alignItems: "center",
+  padding: 10,
+  paddingTop: 0,
+  position: "relative",
+  width: "100%",
+  gap: 10,
+  flexDirection: "column",
+  "@media (min-width: 1024px)": {
+    flexDirection: "row",
+  },
+});
+
+const StyledPrizes = styled(Prizes)({
+  width: "100%",
+  "@media (min-width: 1024px)": {
+    width: "calc(50% - 172px)",
+    height: "576px !important",
+  },
+});
+
+const StyledGame = styled(Game)({
+  width: "324px !important",
+  height: "576px !important",
+  display: "none",
+  "@media (min-width: 1024px)": {
+    display: "block",
+  },
+});
+
+const StyledLeaderBoard = styled(LeaderBoard)({
+  width: "100%",
+  "@media (min-width: 1024px)": {
+    width: "calc(50% - 172px)",
+    height: "576px !important",
+  },
 });
 
 const HelpButton = styled(Button)({
@@ -69,6 +98,10 @@ const HelpButton = styled(Button)({
   color: colors.orange,
   "&:hover": {
     color: colors.white,
+  },
+  display: "none",
+  "@media (min-width: 1024px)": {
+    display: "block",
   },
 });
 
@@ -78,8 +111,23 @@ const AboutButton = styled(Button)({
   "&:hover": {
     color: colors.white,
   },
+  display: "none",
+  "@media (min-width: 1024px)": {
+    display: "block",
+  },
 });
 
 const ConnectButton = styled(Button)({
-  marginLeft: 20,
+  marginLeft: "auto",
+  "@media (min-width: 1024px)": {
+    marginLeft: 20,
+  },
+});
+
+const StyledFAQ = styled(FAQ)({
+  width: "100%",
+});
+
+const StyledCompetitionHistory = styled(CompetitionHistory)({
+  width: "100%",
 });

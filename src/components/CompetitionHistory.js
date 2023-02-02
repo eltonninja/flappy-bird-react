@@ -5,6 +5,7 @@ import { formatDate, formatWalletAddress } from "../utils";
 import prizeRates from "../values/prizeRates";
 import colors from "../values/colors";
 import SvgAlgoIcon from "../assets/AlgoIcon";
+import { FaRegCopy } from "react-icons/fa";
 
 export function CompetitionHistory({ className }) {
   const { data: competitions, isLoading } = usePastCompetitions();
@@ -18,21 +19,25 @@ export function CompetitionHistory({ className }) {
             {competitions.map((competition) => (
               <CompetitionItem>
                 <CompetitionTime>
-                  {formatDate(competition["start_time"])} -{" "}
+                  {formatDate(competition["start_time"])} ~{" "}
                   {formatDate(competition["end_time"])}
                 </CompetitionTime>
                 <CompetitionPrizeList>
                   {Array.from({ length: 10 }).map((_, i) => (
                     <CompetitionPrizeItem>
                       <CompetitionPrize>
-                        #{i + 1} {competition["algo"] * prizeRates[i]}
-                        <AlgoIcon width={20} height={20} />
+                        #{i + 1}
+                        <span>
+                          {competition["algo"] * prizeRates[i]}
+                          <AlgoIcon width={20} height={20} />
+                        </span>
                       </CompetitionPrize>
                       <CompetitionWallet>
                         {formatWalletAddress(
                           competition[`rank${i + 1}_wallet`]
                         )}
                       </CompetitionWallet>
+                      <CopyIcon title={competition[`rank${i + 1}_wallet`]} />
                     </CompetitionPrizeItem>
                   ))}
                 </CompetitionPrizeList>
@@ -62,9 +67,12 @@ const CompetitionItem = styled.li({});
 
 const CompetitionTime = styled.p({
   color: colors.orange,
-  fontSize: 20,
   marginBottom: 5,
   borderBottom: `1px solid ${colors.orange}`,
+  fontSize: 16,
+  "@media (min-width: 1024px)": {
+    fontSize: 20,
+  },
 });
 
 const CompetitionPrizeList = styled.ul({
@@ -81,24 +89,56 @@ const CompetitionPrizeItem = styled.li({
   display: "flex",
   alignItems: "center",
   color: colors.orange,
-  fontSize: 24,
   "& svg": {
     fill: colors.orange,
+  },
+  width: "100%",
+  justifyContent: "space-between",
+  "@media (min-width: 1024px)": {
+    width: "initial",
   },
 });
 
 const CompetitionPrize = styled.p({
-  fontSize: 24,
   display: "flex",
   alignItems: "center",
   fontWeight: 700,
+  fontSize: 18,
+  width: 110,
+  "& > span": {
+    marginLeft: "auto",
+  },
+  "& svg": {
+    width: 14,
+    height: 14,
+  },
+  "@media (min-width: 1024px)": {
+    fontSize: 24,
+    width: "initial",
+    "& svg": {
+      width: 20,
+      height: 20,
+    },
+  },
 });
 
 const CompetitionWallet = styled.p({
-  fontSize: 20,
-  marginLeft: 10,
+  marginLeft: "auto",
+  fontSize: 14,
+  "@media (min-width: 1024px)": {
+    marginLeft: 10,
+    fontSize: 18,
+  },
 });
 
 const AlgoIcon = styled(SvgAlgoIcon)({
   marginLeft: 3,
+});
+
+const CopyIcon = styled(FaRegCopy)({
+  cursor: "pointer",
+  marginLeft: 5,
+  "@media (min-width: 1024px)": {
+    marginLeft: 5,
+  },
 });

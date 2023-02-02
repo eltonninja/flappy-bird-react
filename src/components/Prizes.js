@@ -42,12 +42,12 @@ export function Prizes({ prizeWallet, className }) {
             {data.prizes.map(({ wallet, score }, i) => (
               <PrizeItem key={wallet}>
                 <PrizeItemRank>#{i + 1}</PrizeItemRank>
-                <PrizeItemWallet>{formatWalletAddress(wallet)}</PrizeItemWallet>
-                <CopyIcon title={wallet} />
                 <PrizeItemValue>
                   {formatNumber(Math.round(data.algo * prizeRates[i]))}
                   <AlgoIcon width={20} height={20} fill={colors.orange} />
                 </PrizeItemValue>{" "}
+                <PrizeItemWallet>{formatWalletAddress(wallet)}</PrizeItemWallet>
+                <CopyIcon title={wallet} />
               </PrizeItem>
             ))}
           </PrizeList>
@@ -75,17 +75,19 @@ const WalletText = styled.span({
 
 const TimeLeftText = styled.p({
   color: colors.orange,
-  fontSize: 20,
   "& > span": {
     fontSize: "1.2em",
     fontWeight: "bold",
+  },
+  fontSize: 16,
+  "@media (min-width: 1024px)": {
+    fontSize: 20,
   },
 });
 
 const PrizeList = styled.ul({
   listStyle: "none",
-  marginLeft: "auto",
-  marginRight: "auto",
+  margin: "6px auto",
   padding: 0,
 });
 
@@ -93,21 +95,36 @@ const PrizeItem = styled.li({
   display: "flex",
   alignItems: "center",
   color: colors.orange,
-  fontSize: 20,
   "& > span": {
     fontSize: "1.2em",
+  },
+  fontSize: 16,
+  "& svg": {
+    width: 14,
+    height: 14,
+  },
+  "@media (min-width: 1024px)": {
+    fontSize: 20,
+    "& svg": {
+      width: 14,
+      height: 14,
+    },
   },
 });
 
 const PrizeItemRank = styled.p({
   textAlign: "right",
-  width: 35,
-  marginRight: 10,
+  width: 25,
+  // marginRight: 10,
+  "@media (min-width: 1024px)": {
+    width: 35,
+    marginRight: 10,
+  },
 });
 
 const PrizeItemWallet = styled.p({
-  marginLeft: 10,
-  fontFamily: "monospace",
+  marginLeft: "auto",
+  fontSize: "0.9em",
   "& > span": {
     fontFamily: "initial",
   },
@@ -115,17 +132,29 @@ const PrizeItemWallet = styled.p({
 
 const PrizeItemValue = styled.p({
   display: "flex",
+  justifyContent: "right",
   alignItems: "center",
-  marginLeft: "auto",
   fontWeight: 700,
   fontSize: "1.2em",
+  width: 82,
+  marginLeft: 3,
+  "@media (min-width: 1024px)": {
+    width: 100,
+    marginLeft: 10,
+  },
 });
 
 const AlgoIcon = styled(SvgAlgoIcon)({
-  marginLeft: 3,
+  marginLeft: 1,
+  "@media (min-width: 1024px)": {
+    marginLeft: 3,
+  },
 });
 
 const CopyIcon = styled(FaRegCopy)({
-  marginLeft: 15,
   cursor: "pointer",
+  marginLeft: 5,
+  "@media (min-width: 1024px)": {
+    marginLeft: 10,
+  },
 });
