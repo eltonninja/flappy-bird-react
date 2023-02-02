@@ -23,7 +23,7 @@ function App() {
       peraWallet.connector?.on("disconnect", disconnect);
 
       if (peraWallet.isConnected && accounts.length) {
-        setAccount({ account: accounts[0] });
+        setAccount({ address: accounts[0] });
       }
     });
   }, []);
