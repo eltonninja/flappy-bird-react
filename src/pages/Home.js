@@ -13,6 +13,7 @@ import { useBalance, useLastGame } from "../hooks";
 import axios from "axios";
 import { FAQ } from "../components/FAQ";
 import { CompetitionHistory } from "../components/CompetitionHistory";
+import colors from "../values/colors";
 
 const baseServer = "https://testnet-algorand.api.purestake.io/ps2";
 const port = "";
@@ -102,6 +103,7 @@ export function Home({ account, disconnect, myAlgoConnect }) {
           address={account?.address}
           handleAfterFinished={handleAfterGameFinished}
         />
+        {/* <ScrollArea /> */}
         <StyledLeaderBoard wallet={account?.address} />
         <StyledFAQ />
         <StyledCompetitionHistory />
@@ -143,12 +145,33 @@ const StyledPrizes = styled(Prizes)({
 });
 
 const StyledGame = styled(Game)({
-  width: "100% !important",
+  position: "relative",
+  width: "80% !important",
+  marginRight: "auto",
   order: 1,
+  overflow: "visible !important",
+  "&::after": {
+    content: '"SCROLL HERE"',
+    position: "absolute",
+    top: 0,
+    left: "100%",
+    width: "calc(25% + 10px)",
+    height: "100%",
+    color: colors.lightOrange,
+    writingMode: "tb",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: 48,
+    fontWeight: 900,
+  },
   "@media (min-width: 1024px)": {
     order: 2,
     width: "324px !important",
     height: "576px !important",
+    "&::after": {
+      display: "none",
+    },
   },
 });
 
