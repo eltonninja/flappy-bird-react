@@ -18,23 +18,27 @@ module.exports = {
     plugins: {
       add: [
         new webpack.ProvidePlugin({
+          process: "process/browser",
           Buffer: ["buffer", "Buffer"],
         }),
-        new webpack.DefinePlugin({
-          "process.env.REACT_APP_SERVER_HOST": JSON.stringify(
-            process.env.REACT_APP_SERVER_HOST
-          ),
-          "process.env.REACT_APP_API_URL": JSON.stringify(
-            process.env.REACT_APP_API_URL
-          ),
-          "process.env.REACT_APP_PRIZE_WALLET": JSON.stringify(
-            process.env.REACT_APP_PRIZE_WALLET
-          ),
-          "process.env.REACT_APP_PURCHASE_AMOUNT": JSON.stringify(
-            process.env.REACT_APP_PURCHASE_AMOUNT
-          ),
-        }),
+        // new webpack.DefinePlugin({
+        //   "process.env.REACT_APP_SERVER_HOST": JSON.stringify(
+        //     process.env.REACT_APP_SERVER_HOST
+        //   ),
+        //   "process.env.REACT_APP_API_URL": JSON.stringify(
+        //     process.env.REACT_APP_API_URL
+        //   ),
+        //   "process.env.REACT_APP_PRIZE_WALLET": JSON.stringify(
+        //     process.env.REACT_APP_PRIZE_WALLET
+        //   ),
+        //   "process.env.REACT_APP_PURCHASE_AMOUNT": JSON.stringify(
+        //     process.env.REACT_APP_PURCHASE_AMOUNT
+        //   ),
+        // }),
       ],
+    },
+    configure: {
+      ignoreWarnings: [/Failed to parse source map/],
     },
   },
 };

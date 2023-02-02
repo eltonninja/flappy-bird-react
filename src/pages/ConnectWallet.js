@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 import { Game } from "../components/Game";
 import { LeaderBoard } from "../components/LeaderBoard";
@@ -5,18 +6,18 @@ import { Button } from "../components/lib";
 import { Prizes } from "../components/Prizes";
 import colors from "../values/colors";
 
-export function ConnectWallet({ connect }) {
+export function ConnectWallet({ handleConnect }) {
   return (
     <Wrapper>
       <Header>
         <LogoText>Flappy Bird</LogoText>
         <HelpButton variant="text">Help</HelpButton>
         <AboutButton variant="text">About Us</AboutButton>
-        <ConnectButton onClick={connect}>Connect</ConnectButton>
+        <ConnectButton onClick={handleConnect}>Connect</ConnectButton>
       </Header>
       <Main>
         <StyledPrizes prizeWallet={process.env.REACT_APP_PRIZE_WALLET} />
-        <StyledGame disabled onClick={connect} />
+        <StyledGame disabled onClick={handleConnect} />
         <StyledLeaderBoard />
       </Main>
     </Wrapper>
