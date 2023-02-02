@@ -115,6 +115,9 @@ const CompetitionPrize = styled.p({
   "@media (min-width: 1024px)": {
     fontSize: 24,
     width: "initial",
+    "& > span": {
+      marginLeft: 10,
+    },
     "& svg": {
       width: 20,
       height: 20,
